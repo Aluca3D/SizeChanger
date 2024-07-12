@@ -1,0 +1,7 @@
+size:
+  #the max size a player can be
+  max-size: 10.0
+  #the min size a player can be
+  min-size: 0.0
+  #the value that will be added/removed when the player uses the command
+  add-remove-value: 0.5

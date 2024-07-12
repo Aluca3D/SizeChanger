@@ -1,0 +1,13 @@
+name: SizeChanger
+version: '${project.version}'
+main: me.rpw.sizechanger.SizeChanger
+api-version: '1.21'
+commands:
+  size:
+    description: 'Change your Size, Health and Speed'
+    usage: "/size [add/remove/get/reset]"
+    permission: size.changer.command
+    permission-message: 'You do not have permission to change your Size'
+permissions:
+  size.changer.command:
+    default: true
