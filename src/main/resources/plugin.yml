@@ -5,7 +5,7 @@ api-version: '1.21'
 commands:
   size:
     description: 'Change your Size, Health and Speed'
-    usage: "/size [add/remove/get/reset]"
+    usage: "/size [add/remove/get/reset] <amount>"
     permission: size.changer.command
     permission-message: 'You do not have permission to change your Size'
 permissions:

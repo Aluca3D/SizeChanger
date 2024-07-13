@@ -13,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class SizeChangerCommand implements CommandExecutor, TabExecutor {
@@ -26,10 +27,18 @@ public class SizeChangerCommand implements CommandExecutor, TabExecutor {
         if (args.length > 0) {
             switch (args[0]) {
                 case "add":
-                    add(sender, player);
+                    if (args.length == 2) {
+                        add(sender, player, Double.parseDouble(args[1]));
+                    } else {
+                        add(sender, player, SizeChangerConfig.getInstance().getAddRemoveValue());
+                    }
                     break;
                 case "remove":
-                    remove(sender, player);
+                    if (args.length == 2) {
+                        remove(sender, player, Double.parseDouble(args[1]));
+                    } else {
+                        remove(sender, player, SizeChangerConfig.getInstance().getAddRemoveValue());
+                    }
                     break;
                 case "get":
                     sender.sendMessage("you are now " + get(player) + " Tall");
@@ -47,19 +56,27 @@ public class SizeChangerCommand implements CommandExecutor, TabExecutor {
         return entity.getAttribute(Attribute.GENERIC_SCALE).getBaseValue();
     }
 
-    private static void add(@NotNull CommandSender sender, LivingEntity entity) {
+    private static void add(@NotNull CommandSender sender, LivingEntity entity, double amount) {
         if (entity.getAttribute(Attribute.GENERIC_SCALE).getBaseValue() >= SizeChangerConfig.getInstance().getMaxSize()) {
             sender.sendMessage("You are already " + SizeChangerConfig.getInstance().getMaxSize() + " Tall");
         } else {
-            entity.getAttribute(Attribute.GENERIC_SCALE).setBaseValue(get(entity) + SizeChangerConfig.getInstance().getAddRemoveValue());
+            if (amount <= SizeChangerConfig.getInstance().getMaxSize() && (get(entity) + amount) <= SizeChangerConfig.getInstance().getMaxSize()) {
+                entity.getAttribute(Attribute.GENERIC_SCALE).setBaseValue(get(entity) + amount);
+            } else {
+                sender.sendMessage("Your given amount ist to big");
+            }
         }
     }
 
-    private static void remove(@NotNull CommandSender sender, LivingEntity entity) {
+    private static void remove(@NotNull CommandSender sender, LivingEntity entity, double amount) {
         if (entity.getAttribute(Attribute.GENERIC_SCALE).getBaseValue() <= SizeChangerConfig.getInstance().getMinSize()) {
             sender.sendMessage("You are already " + SizeChangerConfig.getInstance().getMinSize() + " Tall");
         } else {
-            entity.getAttribute(Attribute.GENERIC_SCALE).setBaseValue(get(entity) - SizeChangerConfig.getInstance().getAddRemoveValue());
+            if (amount >= SizeChangerConfig.getInstance().getMinSize() && (get(entity) - amount) >= SizeChangerConfig.getInstance().getMinSize()) {
+                entity.getAttribute(Attribute.GENERIC_SCALE).setBaseValue(get(entity) - amount);
+            } else {
+                sender.sendMessage("Your given amount ist to small");
+            }
         }
     }
 
